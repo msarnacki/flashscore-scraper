@@ -45,6 +45,7 @@ for id in ids[:1]:
     ###urls for match
     url_match_summary = 'https://www.flashscore.com/match/'+id+'/#match-summary'
     url_match_stats = 'https://www.flashscore.com/match/'+id+'/#match-statistics;0'
+    url_lineups = 'https://www.flashscore.com/match/'+id+'/#lineups;1'
     
     #print(url)
     driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
@@ -99,7 +100,25 @@ for id in ids[:1]:
     soup = BeautifulSoup(page, 'html.parser')
     
     stats_home = soup.find_all(class_="statText statText--homeValue")
-    for stat in stats_home:
-        print(stat.text)    
+    stats_away = soup.find_all(class_="statText statText--awayValue")
     
+    #adding stats to the list (home > away > home > ...), match, 1 half, 2 half - 15 stats for each
+    for i in range(len(stats_home)):
+        #print(stats_home[i].text)    
+        match.append(stats_home[i].text)
+        #print(stats_away[i].text)    
+        match.append(stats_away[i].text)
+    
+    ###
+    #LINEUPS
+    ###
+    driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
+    driver.get(url_lineups)
+    time.sleep(1)
+    page = driver.page_source
+    driver.quit()
+    
+    soup = BeautifulSoup(page, 'html.parser')
+    
+    lineups = soup.find('table', class_='parts')
     print(match)
