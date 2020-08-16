@@ -6,30 +6,46 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-URL = 'https://www.flashscore.com/football/england/premier-league/results/'
-
-driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
-driver.get(URL)
-
-#time for loading all elements
-time.sleep(3)
-#close cookies notification
-button_cookies = driver.find_element_by_xpath("//button[@id='onetrust-accept-btn-handler']")
-button_cookies.click()
-
-#click "more matches" until it is possible
-while('event__more' in driver.page_source):
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    button_more = driver.find_element_by_class_name('event__more.event__more--static')
-    button_more.click()
-    time.sleep(2)
+### 
+# this part would appear multiple times in the code
+###
+def driver_get_source(url):
+    driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
+    driver.get(url)
     
-page = driver.page_source
-driver.quit()
-soup = BeautifulSoup(page, 'html.parser')
+    #time for loading all elements
+    time.sleep(2.5)
+    
+    if 'football' in url:
+        #close cookies notification
+        button_cookies = driver.find_element_by_xpath("//button[@id='onetrust-accept-btn-handler']")
+        button_cookies.click()
+    
+        #click "more matches" until it is possible
+        while('event__more' in driver.page_source):
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            button_more = driver.find_element_by_class_name('event__more.event__more--static')
+            button_more.click()
+            time.sleep(2)
+    
+    page = driver.page_source
+    driver.quit()
+    soup = BeautifulSoup(page, 'html.parser')
+    
+    return soup
 
+url_results = 'https://www.flashscore.com/football/england/premier-league/results/'
+url_match_prefix = 'https://www.flashscore.com/match/'
+
+###
+# get source code from main page with results
+###
+soup = driver_get_source(url_results)
+
+###
+# find and save ids of all matches
+###
 res = soup.find_all(class_='event__match event__match--static event__match--oneLine')
-
 ids = []
 
 for re in res:
@@ -38,27 +54,25 @@ for re in res:
 ids = [id[4:] for id in ids]
 #print(ids)    
 
-for id in ids[:1]:    
+###
+# going through matches
+###
+
+for id in ids[:3]:    
     match = []
     match.append(id)
     
     ###urls for match
-    url_match_summary = 'https://www.flashscore.com/match/'+id+'/#match-summary'
-    url_match_stats = 'https://www.flashscore.com/match/'+id+'/#match-statistics;0'
-    url_lineups = 'https://www.flashscore.com/match/'+id+'/#lineups;1'
-    
-    #print(url)
-    driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
-    driver.get(url_match_summary)
-    time.sleep(1)
-    page = driver.page_source
-    driver.quit()
-    
-    soup = BeautifulSoup(page, 'html.parser')
+    url_match_summary = url_match_prefix+id+'/#match-summary'
+    url_match_stats = url_match_prefix+id+'/#match-statistics;0'
+    url_lineups = url_match_prefix+id+'/#lineups;1'
     
     ###
     #MATCH SUMMARY
     ###
+    
+    #print(url_match_summary)
+    soup = driver_get_source(url_match_summary)
     
     teams1 = soup.find_all("div", {"class":"tname__text"})
     for teams in teams1:
@@ -91,13 +105,7 @@ for id in ids[:1]:
     ###
     #STATS
     ###
-    driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
-    driver.get(url_match_stats)
-    time.sleep(1)
-    page = driver.page_source
-    driver.quit()
-    
-    soup = BeautifulSoup(page, 'html.parser')
+    soup = driver_get_source(url_match_stats)
     
     stats_home = soup.find_all(class_="statText statText--homeValue")
     stats_away = soup.find_all(class_="statText statText--awayValue")
@@ -112,13 +120,21 @@ for id in ids[:1]:
     ###
     #LINEUPS
     ###
-    driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
-    driver.get(url_lineups)
-    time.sleep(1)
-    page = driver.page_source
-    driver.quit()
-    
-    soup = BeautifulSoup(page, 'html.parser')
+    soup = driver_get_source(url_lineups)
     
     lineups = soup.find('table', class_='parts')
+    #print(lineups)
+
+    for tr in lineups.find_all('td', class_='summary-vertical fl'):
+        names_home = tr.find_all(class_='name')
+        for name in names_home:
+            #print(name.text)
+            match.append(name.text)
+    
+    for tr in lineups.find_all('td', class_='summary-vertical fr'):
+        names_away = tr.find_all(class_='name')
+        for name in names_away:
+            #print(name.text)
+            match.append(name.text)
+            
     print(match)
