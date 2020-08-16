@@ -16,6 +16,7 @@ def driver_get_source(url):
     #pc
     #driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
     driver = webdriver.Firefox() 
+    driver.fullscreen_window()
     driver.get(url)
     
     #time for loading all elements
