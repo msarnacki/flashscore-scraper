@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 
 ### 
 # this part would appear multiple times in the code
@@ -23,9 +24,12 @@ def driver_get_source(url):
     
         #click "more matches" until it is possible
         while('event__more' in driver.page_source):
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            #driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             button_more = driver.find_element_by_class_name('event__more.event__more--static')
-            button_more.click()
+            
+            actions = ActionChains(driver)
+            actions.move_to_element(button_more).perform()
+            #button_more.click()
             time.sleep(2)
     
     page = driver.page_source
@@ -58,7 +62,7 @@ ids = [id[4:] for id in ids]
 # going through matches
 ###
 
-for id in ids[:3]:    
+for id in ids[:1]:    
     match = []
     match.append(id)
     
@@ -128,13 +132,21 @@ for id in ids[:3]:
     for tr in lineups.find_all('td', class_='summary-vertical fl'):
         names_home = tr.find_all(class_='name')
         for name in names_home:
-            #print(name.text)
-            match.append(name.text)
+            if '(' in name.text:
+                #print(name.text[:-4])
+                match.append(name.text[:-4])
+            else:
+                #print(name.text)
+                match.append(name.text)
     
     for tr in lineups.find_all('td', class_='summary-vertical fr'):
         names_away = tr.find_all(class_='name')
         for name in names_away:
-            #print(name.text)
-            match.append(name.text)
+            if '(' in name.text:
+                #print(name.text[:-4])
+                match.append(name.text[:-4])
+            else:
+                #print(name.text)
+                match.append(name.text)
             
     print(match)
