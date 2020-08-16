@@ -5,18 +5,20 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
+import re
+
+#laptop
+#driver = webdriver.Chrome('C:/Users/Maciej/Desktop/Programy/chromedriver.exe') 
+#pc
+driver = webdriver.Chrome() 
+#driver = webdriver.Firefox() 
+#driver.fullscreen_window()
+driver.maximize_window()
 
 ### 
 # this part would appear multiple times in the code
 ###
 def driver_get_source(url):
-    #laptop
-    #driver = webdriver.Chrome('C:/Users/Maciej/Desktop/Programy/chromedriver.exe') 
-    #pc
-    #driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
-    driver = webdriver.Firefox() 
-    driver.fullscreen_window()
     driver.get(url)
     
     #time for loading all elements
@@ -32,13 +34,10 @@ def driver_get_source(url):
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             button_more = driver.find_element_by_class_name('event__more.event__more--static')
             
-            #actions = ActionChains(driver)
-            #actions.move_to_element(button_more).perform()
             button_more.click()
             time.sleep(5)
     
     page = driver.page_source
-    driver.quit()
     soup = BeautifulSoup(page, 'html.parser')
     
     return soup
@@ -57,8 +56,8 @@ soup = driver_get_source(url_results)
 res = soup.find_all(class_='event__match event__match--static event__match--oneLine')
 ids = []
 
-for re in res:
-    ids.append(re.get('id'))
+for red in res:
+    ids.append(red.get('id'))
         
 ids = [id[4:] for id in ids]
 #print(ids)    
@@ -153,5 +152,20 @@ for id in ids[:1]:
             else:
                 #print(name.text)
                 match.append(name.text)
-            
+     
+    ###    
+    # INCIDENTS
+    ###
+    
+    #####################
+    #poprawić oznaczenia gol/zmiana/kartka itd
+    regex = re.compile('.*detailMS__incidentRow incidentRow--*.')
+    incidents = soup.find_all("div", {"class": regex})
+    #print(incidents)
+    for incident in incidents:
+        #print(incident.text)
+        match.append(incident.get_text(strip=True))
+        
+    driver.quit()
+    
     print(match)
