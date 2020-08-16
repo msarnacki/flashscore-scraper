@@ -12,9 +12,10 @@ from selenium.webdriver.common.action_chains import ActionChains
 ###
 def driver_get_source(url):
     #laptop
-    driver = webdriver.Chrome('C:/Users/Maciej/Desktop/Programy/chromedriver.exe') 
+    #driver = webdriver.Chrome('C:/Users/Maciej/Desktop/Programy/chromedriver.exe') 
     #pc
     #driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
+    driver = webdriver.Firefox() 
     driver.get(url)
     
     #time for loading all elements
@@ -27,13 +28,13 @@ def driver_get_source(url):
     
         #click "more matches" until it is possible
         while('event__more' in driver.page_source):
-            #driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             button_more = driver.find_element_by_class_name('event__more.event__more--static')
             
-            actions = ActionChains(driver)
-            actions.move_to_element(button_more).perform()
-            #button_more.click()
-            time.sleep(2)
+            #actions = ActionChains(driver)
+            #actions.move_to_element(button_more).perform()
+            button_more.click()
+            time.sleep(5)
     
     page = driver.page_source
     driver.quit()
