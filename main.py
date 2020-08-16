@@ -11,7 +11,10 @@ from selenium.webdriver.common.action_chains import ActionChains
 # this part would appear multiple times in the code
 ###
 def driver_get_source(url):
-    driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
+    #laptop
+    driver = webdriver.Chrome('C:/Users/Maciej/Desktop/Programy/chromedriver.exe') 
+    #pc
+    #driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
     driver.get(url)
     
     #time for loading all elements
