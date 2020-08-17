@@ -24,7 +24,7 @@ regex = re.compile('.*detailMS__incidentRow incidentRow--*.')
 incidents = soup.find_all("div", {"class": regex})
 #print(incidents)
 for incident in incidents:
-    incident_str = ""
+    team = ""
     time = ""
     incident_name = ""
     who = ""
@@ -37,9 +37,14 @@ for incident in incidents:
         #print(inc.get('class'))
         #print("\n AAA \n")
         
+        
         #time
         if any(string in ['time-box','time-box-wide'] for string in inc.get('class')):
             time = str(inc.text)
+            if 'incidentRow--away' in inc.findParent(recursive = False).get('class'):
+                team = "A"
+            elif 'incidentRow--home' in inc.findParent(recursive = False).get('class'):
+                team = "H"
         #type of incidents
         elif 'soccer-ball' in inc.get('class'):
             incident_name = "G-"
@@ -61,7 +66,7 @@ for incident in incidents:
                 elif 'incidentRow--home' in inc.findParent(recursive = False).get('class'):
                     who2 = who2[1:]
                     
-    incident_str = time + incident_name + who + '-' + who2    
+    incident_str = team + time + incident_name + who + '-' + who2    
     print(incident_str)
         
     #print("\n BBB \n")
