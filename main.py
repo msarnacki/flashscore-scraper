@@ -164,6 +164,8 @@ for id in ids[:1]:
     #print(incidents)
     for incident in incidents:
         #print(incident.text)
+        
+        
         match.append(incident.get_text(strip=True))
         
     driver.quit()
