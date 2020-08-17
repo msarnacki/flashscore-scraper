@@ -25,7 +25,7 @@ def driver_get_source(url):
     driver.get(url)
     
     #time for loading all elements
-    time.sleep(2.5)
+    time.sleep(5)
     
     if 'football' in url:
         #close cookies notification
@@ -101,8 +101,8 @@ print(len(ids))
 
 matches = []
 
-#for id in ids[-2:]:  
-for id in ids:    
+for id in ids[:20]:  
+#for id in ids:    
     match = []
     match.append(id)
     
@@ -269,4 +269,15 @@ driver.quit()
 df = pd.DataFrame(matches, columns = column_names)
 print(df.head())
 
-df.to_excel("Premier League 19/20.xlsx")
+df.to_excel("Premier_League_19_20.xlsx")
+
+#### wziąć pod uwagę var w wydarzeniach
+
+#### zrobić tak żeby zawsze robiło 16 kolumn w statystykach (bo zazwyczaj nie ma czerwonej i wtedy jest 15)
+
+
+
+
+
+
+
