@@ -25,7 +25,7 @@ def driver_get_source(url):
     driver.get(url)
     
     #time for loading all elements
-    time.sleep(5)
+    time.sleep(3.5)
     
     if 'football' in url:
         #close cookies notification
@@ -101,7 +101,7 @@ print(len(ids))
 
 matches = []
 
-for id in ids[:20]:  
+for id in ids[:5]:  
 #for id in ids:    
     match = []
     match.append(id)
@@ -153,21 +153,31 @@ for id in ids[:20]:
     ###
     soup = driver_get_source(url_match_stats)
     
+    stats = ['Ball Possession', 'Goal Attempts', 'Shots on Goal', 'Shots off Goal', 'Blocked Shots', 'Free Kicks', 'Corner Kicks',
+         'Offsides', 'Goalkeeper Saves', 'Fouls', 'Red Cards', 'Yellow Cards', 'Total Passes', 'Completed Passes', 'Tackles',
+         'Attacks', 'Dangerous Attacks']
+
     stats_home = soup.find_all(class_="statText statText--homeValue")
     stats_away = soup.find_all(class_="statText statText--awayValue")
-    
+        
     #adding stats to the list (home > away > home > ...), match, 1 half, 2 half - 15 stats for each
-    for i in range(len(stats_home)):
-        #print(stats_home[i].text)    
-        match.append(stats_home[i].text)
-        #print(stats_away[i].text)    
-        match.append(stats_away[i].text)
+    #statistics = []
+    j = 0
+    for i in range(3*len(stats)):
+        if stats_home[j].findNext('div').text == stats[i%len(stats)]:
+            match.append(stats_home[j].text)
+            match.append(stats_away[j].text)
+            j += 1
+        else:
+            match.extend(['', ''])
+            
+    #print(statistics)
+    #print(len(statistics))
     
     ###
     #LINEUPS
     ###
     soup = driver_get_source(url_lineups)
-    
 
     lineups = soup.find('table', class_='parts')
     #print(lineups)
@@ -272,11 +282,6 @@ print(df.head())
 df.to_excel("Premier_League_19_20.xlsx")
 
 #### wziąć pod uwagę var w wydarzeniach
-
-#### zrobić tak żeby zawsze robiło 16 kolumn w statystykach (bo zazwyczaj nie ma czerwonej i wtedy jest 15)
-
-
-
 
 
 

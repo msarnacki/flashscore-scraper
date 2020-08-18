@@ -10,7 +10,7 @@ URL3 = 'https://www.flashscore.com/match/2JDks1o7/#lineups;1'
 #page = requests.get(URL).text
 
 driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
-driver.get(URL3)
+driver.get(URL2)
 
 time.sleep(2)
 
@@ -20,33 +20,24 @@ soup = BeautifulSoup(page, 'html.parser')
 
 driver.quit()
 
-lineups = soup.find('table', class_='parts')
-#print(lineups)
+stats = ['Ball Possession', 'Goal Attempts', 'Shots on Goal', 'Shots off Goal', 'Blocked Shots', 'Free Kicks', 'Corner Kicks',
+         'Offsides', 'Goalkeeper Saves', 'Fouls', 'Red Cards', 'Yellow Cards', 'Total Passes', 'Completed Passes', 'Tackles',
+         'Attacks', 'Dangerous Attacks']
 
-names_home = []
-for tr in lineups.find_all('td', class_='summary-vertical fl'):
-    name_home = tr.find_all(class_='name')
-    #print(names_home)
-    for name in name_home:
-        if '(' in name.text:
-            #print(name.text[:-4])
-            names_home.append(name.text[:-4])
-            #match.append(name.text[:-4])
-        else:
-            #print(name.text)
-            names_home.append(name.text)
-            #match.append(name.text)
-
-names_away = []
-for tr in lineups.find_all('td', class_='summary-vertical fr'):
-    name_away = tr.find_all(class_='name')
-    for name in name_away:
-        if '(' in name.text:
-            #print(name.text[:-4])
-            names_away.append(name.text[:-4])
-            #match.append(name.text[:-4])
-        else:
-            #print(name.text)
-            names_away.append(name.text)
-            #match.append(name.text)
+stats_home = soup.find_all(class_="statText statText--homeValue")
+stats_away = soup.find_all(class_="statText statText--awayValue")
     
+#adding stats to the list (home > away > home > ...), match, 1 half, 2 half - 15 stats for each
+statistics = []
+j = 0
+for i in range(3*len(stats)):
+    if stats_home[j].findNext('div').text == stats[i%len(stats)]:
+        statistics.append(stats_home[j].text)
+        statistics.append(stats_away[j].text)
+        j += 1
+        print(j)
+    else:
+        statistics.extend(['', ''])
+        
+print(statistics)
+print(len(statistics))
