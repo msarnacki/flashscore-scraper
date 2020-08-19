@@ -101,8 +101,8 @@ print(len(ids))
 
 matches = []
 
-for id in ids[:30]:  
-#for id in ids:    
+#for id in ids[:30]:  
+for id in ids:    
     match = []
     match.append(id)
     
@@ -209,10 +209,10 @@ for id in ids[:30]:
                 names_away.append(name.text)
                 #match.append(name.text)
     
-    if len(names_home) == 18:
-        for i in range(2):
-            names_home.append('')
-            names_away.append('')
+    while names_home < 20 :
+        names_home.append('')
+    while names_away < 20 :
+        names_away.append('')
             
     match.extend(names_home)
     match.extend(names_away)
@@ -257,10 +257,10 @@ for id in ids[:30]:
             elif 'var' in inc.get('class'):
                 incident_name = "V-"
             #main person
-            elif any(string in ['substitution-in-name','participant-name'] for string in inc.get('class')):
+            elif any(string in ['substitution-in-name','participant-name', 'subincident-var'] for string in inc.get('class')):
                 who = str(inc.text)
             #second person / (penalty) etc.
-            elif any(string in ['substitution-out-name','assist-note-name', 'subincident-name'] for string in inc.get('class')):
+            elif any(string in ['substitution-out-name','note-name', 'subincident-name'] for string in inc.get('class')):
                 who2 = str(inc.text)
                 if 'substitution-out-name' in inc.get('class'):
                     if 'incidentRow--away' in inc.findParent(recursive = False).get('class'):
