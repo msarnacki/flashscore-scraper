@@ -74,7 +74,8 @@ column_names = ['match_id', 'home_team', 'away_team', 'FT_home_sc', 'FT_away_sc'
 column_names.extend(incidents_cols)
 #################################
 
-url_results = 'https://www.flashscore.com/football/england/premier-league/results/'
+#url_results = 'https://www.flashscore.com/football/england/premier-league/results/'
+url_results = 'https://www.flashscore.com/football/england/premier-league-2018-2019/results/'
 url_match_prefix = 'https://www.flashscore.com/match/'
 
 ###
@@ -209,9 +210,9 @@ for id in ids:
                 names_away.append(name.text)
                 #match.append(name.text)
     
-    while names_home < 20 :
+    while len(names_home) < 20 :
         names_home.append('')
-    while names_away < 20 :
+    while len(names_away) < 20 :
         names_away.append('')
             
     match.extend(names_home)
@@ -285,7 +286,8 @@ driver.quit()
 df = pd.DataFrame(matches, columns = column_names)
 print(df.head())
 
-df.to_excel("Premier_League_19_20.xlsx")
+#df.to_excel("Premier_League_19_20.xlsx")
+df.to_excel("Premier_League_18_19.xlsx")
 
 
 
