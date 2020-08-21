@@ -26,15 +26,15 @@ Scraped data includes 190 columns. In one Premier League season there are 380 ma
 
 ## Fragments of scraped data
 
-<p align="center">
+<p align="left">
 <img src="img/part1.png"/>
 </p>
-<p align="center">
+<p align="left">
 <img src="img/part2.png"/>
 </p>
-<p align="center">
+<p align="left">
 <img src="img/part3.png"/>
 </p>
-<p align="center">
+<p align="left">
 <img src="img/part4.png"/>
 </p>
