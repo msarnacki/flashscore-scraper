@@ -284,5 +284,5 @@ driver.quit()
 df = pd.DataFrame(matches, columns = column_names)
 print(df.head())
 
-df.to_excel("Premier_League_19_20.xlsx")
-#df.to_excel("Premier_League_18_19.xlsx")
+df.to_excel("data/Premier_League_19_20.xlsx")
+#df.to_excel("data/Premier_League_18_19.xlsx")
