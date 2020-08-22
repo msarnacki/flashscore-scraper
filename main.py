@@ -5,6 +5,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
+
 import re
 import pandas as pd
 
@@ -34,7 +36,6 @@ def driver_get_source(url):
         while('event__more' in driver.page_source):
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             button_more = driver.find_element_by_class_name('event__more.event__more--static')
-            
             button_more.click()
             time.sleep(5)
     
@@ -48,7 +49,7 @@ incidents_cols = []
 for i in range(40):
     incidents_cols.append("incident_"+str(i+1))
 
-column_names = ['match_id', 'home_team', 'away_team', 'FT_home_sc', 'FT_away_sc', 'FH_home_sc', 'FH_away_sc', 'SH_home_sc', 'SH_away_sc',
+column_names = ['match_id', 'home_team', 'away_team', 'referee', 'FT_home_sc', 'FT_away_sc', 'FH_home_sc', 'FH_away_sc', 'SH_home_sc', 'SH_away_sc',
                 'FT_home_possession','FT_away_possession', 'FT_home_goal_attempts', 'FT_away_goal_attempts', 'FT_home_shots_on_goal', 'FT_away_shots_on_goal',
                 'FT_home_shots_off_goal', 'FT_away_shots_off_goal', 'FT_home_blocked_shots', 'FT_away_blocked_shots', 'FT_home_freekicks', 'FT_away_freekicks',
                 'FT_home_corners', 'FT_away_corners', 'FT_home_offsides', 'FT_away_offsides', 'FT_home_gk_saves', 'FT_away_gk_saves', 'FT_home_fouls', 'FT_away_fouls',
@@ -72,8 +73,9 @@ column_names = ['match_id', 'home_team', 'away_team', 'FT_home_sc', 'FT_away_sc'
 column_names.extend(incidents_cols)
 #################################
 
-url_results = 'https://www.flashscore.com/football/england/premier-league/results/'
-#url_results = 'https://www.flashscore.com/football/england/premier-league-2018-2019/results/'
+### URLS SEASON
+#url_results = 'https://www.flashscore.com/football/england/premier-league-2019-2020/results/'
+url_results = 'https://www.flashscore.com/football/england/premier-league-2018-2019/results/'
 url_match_prefix = 'https://www.flashscore.com/match/'
 
 ###
@@ -91,8 +93,8 @@ for red in res:
     ids.append(red.get('id'))
         
 ids = [id[4:] for id in ids]
-print(ids)    
-print(len(ids))
+#print(ids)    
+#print(len(ids))
 
 ###
 # going through matches
@@ -100,7 +102,7 @@ print(len(ids))
 
 matches = []
 
-#for id in ids[:30]:  
+#for id in ids[:2]:  
 for id in ids:    
     match = []
     match.append(id)
@@ -125,6 +127,9 @@ for id in ids:
         for team in teams2:
             #print(team.text)
             match.append(team.text)
+            
+    referee = soup.find("div", class_="content")
+    match.append(referee.text[9:-2])
             
     scores = soup.find_all(class_='scoreboard')
     for score in scores:    
@@ -284,5 +289,6 @@ driver.quit()
 df = pd.DataFrame(matches, columns = column_names)
 print(df.head())
 
-df.to_excel("data/Premier_League_19_20.xlsx")
-#df.to_excel("data/Premier_League_18_19.xlsx")
+### SEASON SAVE DATA
+#df.to_excel("data/Premier_League_19_20.xlsx")
+df.to_excel("data/Premier_League_18_19.xlsx")
