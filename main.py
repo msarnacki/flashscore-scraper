@@ -49,7 +49,8 @@ incidents_cols = []
 for i in range(40):
     incidents_cols.append("incident_"+str(i+1))
 
-column_names = ['match_id', 'home_team', 'away_team', 'referee', 'FT_home_sc', 'FT_away_sc', 'FH_home_sc', 'FH_away_sc', 'SH_home_sc', 'SH_away_sc',
+column_names = ['match_id', 'home_team', 'away_team', 'referee', 'home_odds_orginal','home_odds_final', 'draw_odds_orginal','draw_odds_final', 'away_odds_orginal','away_odds_final', 
+                'FT_home_sc', 'FT_away_sc', 'FH_home_sc', 'FH_away_sc', 'SH_home_sc', 'SH_away_sc',
                 'FT_home_possession','FT_away_possession', 'FT_home_goal_attempts', 'FT_away_goal_attempts', 'FT_home_shots_on_goal', 'FT_away_shots_on_goal',
                 'FT_home_shots_off_goal', 'FT_away_shots_off_goal', 'FT_home_blocked_shots', 'FT_away_blocked_shots', 'FT_home_freekicks', 'FT_away_freekicks',
                 'FT_home_corners', 'FT_away_corners', 'FT_home_offsides', 'FT_away_offsides', 'FT_home_gk_saves', 'FT_away_gk_saves', 'FT_home_fouls', 'FT_away_fouls',
@@ -102,8 +103,8 @@ ids = [id[4:] for id in ids]
 
 matches = []
 
-#for id in ids[:2]:  
-for id in ids:    
+for id in ids[:2]:  
+#for id in ids:    
     match = []
     match.append(id)
     
@@ -131,6 +132,18 @@ for id in ids:
     referee = soup.find("div", class_="content")
     match.append(referee.text[9:-2])
             
+    odds = soup.find_all(class_ = 'odds-wrap')
+
+    for odd in odds:
+        #print(odd['alt'])
+        odd1 = odd['alt'][:4]
+        odd2 = odd['alt'][-4:]
+        
+        match.append(odd1)
+        match.append(odd2)
+        #print(odd1)
+        #print(odd2)
+    
     scores = soup.find_all(class_='scoreboard')
     for score in scores:    
         #print(score.text)
@@ -287,8 +300,8 @@ for id in ids:
 driver.quit()
 
 df = pd.DataFrame(matches, columns = column_names)
-print(df.head())
+print(df[['home_odds_orginal','home_odds_final']].head())
 
 ### SEASON SAVE DATA
 #df.to_excel("data/Premier_League_19_20.xlsx")
-df.to_excel("data/Premier_League_18_19.xlsx")
+#df.to_excel("data/Premier_League_18_19.xlsx")
