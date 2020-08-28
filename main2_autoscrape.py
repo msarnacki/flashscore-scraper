@@ -10,6 +10,15 @@ from selenium.webdriver.common.action_chains import ActionChains
 import re
 import pandas as pd
 
+#########################################################
+# TODO:
+# - fix number of columns for leagues with matches (cant save to xlsx) - propably need to add some try except
+# - function that takes str with text and prints time and that str - what currently happens in script
+# - use webdriverwait instead time.sleep
+# - 
+# - 
+#########################################################
+
 start = time.time()
 
 #pc
@@ -59,7 +68,7 @@ def set_urls_xlsx(done, path):
     
 ################################
 incidents_cols = []
-for i in range(40):
+for i in range(30):
     incidents_cols.append("incident_"+str(i+1))
 
 column_names = ['match_id', 'home_team', 'away_team', 'referee', 'home_odds_orginal','home_odds_final', 'draw_odds_orginal','draw_odds_final', 'away_odds_orginal','away_odds_final', 
@@ -91,9 +100,9 @@ stats = ['Ball Possession', 'Goal Attempts', 'Shots on Goal', 'Shots off Goal', 
          'Offsides', 'Goalkeeper Saves', 'Fouls', 'Red Cards', 'Yellow Cards', 'Total Passes', 'Completed Passes', 'Tackles',
          'Attacks', 'Dangerous Attacks']
 
-### URLS SEASON
+### URLS
 #url_results = 'https://www.flashscore.com/football/england/premier-league-2019-2020/results/'
-url_results = 'https://www.flashscore.com/football/england/premier-league-2018-2019/results/'
+#url_results = 'https://www.flashscore.com/football/england/premier-league-2018-2019/results/'
 url_match_prefix = 'https://www.flashscore.com/match/'
 
 ###
@@ -150,12 +159,15 @@ for url in urls:
                 #print(team.text)
                 match.append(team.text)
                 
-        referee = soup.find("div", class_="content")
-        match.append(referee.text[9:-2])
-                
-        odd = soup.find(class_ = 'odd')
+        try: 
+            referee = soup.find("div", class_="content")
+            match.append(referee.text[9:-2])
+        except:
+            match.append('')
+            
+        odd = soup.find('tr', class_ = 'odd')
         odds = odd.find_all(class_ = 'odds-wrap')
-    
+        
         for odd in odds:
             #print(odd['alt'])
             odd1 = odd['alt'][:4]
@@ -190,69 +202,84 @@ for url in urls:
         ###
         #STATS
         ###
-        soup = driver_get_source(url_match_stats)
-    
-        stats_home = soup.find_all(class_="statText statText--homeValue")
-        stats_away = soup.find_all(class_="statText statText--awayValue")
+        try:
+            soup = driver_get_source(url_match_stats)
             
-        #adding stats to the list (home > away > home > ...), match, 1 half, 2 half - 15 stats for each
-        #statistics = []
-        j = 0
-        for i in range(3*len(stats)):
-            # j%len(stats_home) - dzieki temu j nie przekroczy indeksu (wyzeruje sie gdy skoncza sie stats_home wiec wpisane zostana dalej '')
-            if stats_home[j%len(stats_home)].findNext('div').text == stats[i%len(stats)]:
-                match.append(stats_home[j].text)
-                match.append(stats_away[j].text)
-                j += 1
-            else:
-                match.extend(['', ''])
-                
-        #print(statistics)
-        #print(len(statistics))
-        
+            stats_home = soup.find_all(class_="statText statText--homeValue")
+            stats_away = soup.find_all(class_="statText statText--awayValue")
+            #adding stats to the list (home > away > home > ...), match, 1 half, 2 half - 15 stats for each
+            #statistics = []
+            j = 0
+            for i in range(3*len(stats)):
+                # j%len(stats_home) - dzieki temu j nie przekroczy indeksu (wyzeruje sie gdy skoncza sie stats_home wiec wpisane zostana dalej '')
+                if stats_home[j%len(stats_home)].findNext('div').text == stats[i%len(stats)]:
+                    match.append(stats_home[j].text)
+                    match.append(stats_away[j].text)
+                    j += 1
+                else:
+                    match.extend(['', ''])
+                    
+            #print(statistics)
+            #print(len(statistics))
+        except:
+            #putting '' in place if no match stats for that match
+            list_empty_str = []
+            for i in range(3*len(stats)):
+                list_empty_str.append('')
+            match.extend(list_empty_str)
+            
+            
         ###
         #LINEUPS
         ###
-        soup = driver_get_source(url_lineups)
-    
-        lineups = soup.find('table', class_='parts')
-        #print(lineups)
-        
-        names_home = []
-        for tr in lineups.find_all('td', class_='summary-vertical fl'):
-            name_home = tr.find_all(class_='name')
-            #print(names_home)
-            for name in name_home:
-                if '(' in name.text:
-                    #print(name.text[:-4])
-                    names_home.append(name.text[:-4])
-                    #match.append(name.text[:-4])
-                else:
-                    #print(name.text)
-                    names_home.append(name.text)
-                    #match.append(name.text)
-        
-        names_away = []
-        for tr in lineups.find_all('td', class_='summary-vertical fr'):
-            name_away = tr.find_all(class_='name')
-            for name in name_away:
-                if '(' in name.text:
-                    #print(name.text[:-4])
-                    names_away.append(name.text[:-4])
-                    #match.append(name.text[:-4])
-                else:
-                    #print(name.text)
-                    names_away.append(name.text)
-                    #match.append(name.text)
-        
-        while len(names_home) < 20 :
-            names_home.append('')
-        while len(names_away) < 20 :
-            names_away.append('')
-                
-        match.extend(names_home)
-        match.extend(names_away)
-        
+        try:
+            soup = driver_get_source(url_lineups)
+            
+            lineups = soup.find('table', class_='parts')
+            #print(lineups)
+            
+            names_home = []
+            for tr in lineups.find_all('td', class_='summary-vertical fl'):
+                name_home = tr.find_all(class_='name')
+                #print(names_home)
+                for name in name_home:
+                    if '(' in name.text:
+                        #print(name.text[:-4])
+                        names_home.append(name.text[:-4])
+                        #match.append(name.text[:-4])
+                    else:
+                        #print(name.text)
+                        names_home.append(name.text)
+                        #match.append(name.text)
+            
+            names_away = []
+            for tr in lineups.find_all('td', class_='summary-vertical fr'):
+                name_away = tr.find_all(class_='name')
+                for name in name_away:
+                    if '(' in name.text:
+                        #print(name.text[:-4])
+                        names_away.append(name.text[:-4])
+                        #match.append(name.text[:-4])
+                    else:
+                        #print(name.text)
+                        names_away.append(name.text)
+                        #match.append(name.text)
+            
+            while len(names_home) < 20 :
+                names_home.append('')
+            while len(names_away) < 20 :
+                names_away.append('')
+                    
+            match.extend(names_home)
+            match.extend(names_away)
+        except:
+            #putting '' in place if no lineups for that match
+            list_empty_str = []
+            for i in range(40):
+                list_empty_str.append('')
+            match.extend(list_empty_str)
+            
+            
         ###    
         # INCIDENTS
         ###
