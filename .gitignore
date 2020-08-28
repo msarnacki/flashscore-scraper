@@ -2,5 +2,3 @@ geckodriver.log
 data/
 .ipynb_checkpoints
 auto_main.py
-main2_testing_auto.py
-urls.xlsx

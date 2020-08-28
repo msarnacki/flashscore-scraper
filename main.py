@@ -132,7 +132,8 @@ for id in ids[:2]:
     referee = soup.find("div", class_="content")
     match.append(referee.text[9:-2])
             
-    odds = soup.find_all(class_ = 'odds-wrap')
+    odd = soup.find(class_ = 'odd')
+    odds = odd.find_all(class_ = 'odds-wrap')
 
     for odd in odds:
         #print(odd['alt'])
