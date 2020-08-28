@@ -11,6 +11,8 @@ To get all the data script needs to work about 80 minutes and this is because lo
 
 Main script (the one descriped above) is [main.py](../master/main.py).
 
+Currently working on [main2_autoscrape.py](../master/main2_autoscrape.py) and this will be main program here. At this moment [main.py](../master/main.py) is obsolete. When I finish working on [main2_autoscrape.py](../master/main2_autoscrape.py) I will refactor code in both scripts. 
+
 ## Scraped data
 Teams and lineups (first squad and subs), score, statistics (fulltime, first half and second half for every statistic) for example: ball possession, shots on target, shots off target, saves, cards and passes.
 For every match scraped are also all incidents that happend during a match. They are for example: goals, yellow and red cards, substitutions. For every of them there are also more details (scorer, assist, sub in - sub out, own goal, penalty kick missed, VAR).
@@ -23,6 +25,7 @@ Scraped data includes 190 columns. In one Premier League season there are 380 ma
 - Selenium
 - chromedriver / geckodriver
 - BeautifulSoup4
+- pandas
 
 ## Fragments of scraped data
 

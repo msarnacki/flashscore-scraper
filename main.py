@@ -10,6 +10,12 @@ from selenium.webdriver.common.action_chains import ActionChains
 import re
 import pandas as pd
 
+#########################################################
+# TODO:
+# - after finishing main2_autoscrape.py make functions of scraping code and use them in both scripts
+# - 
+#########################################################
+
 start = time.time()
 
 #pc
