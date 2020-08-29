@@ -12,7 +12,7 @@ import pandas as pd
 
 #########################################################
 # TODO:
-# - fix number of columns for leagues with matches (cant save to xlsx) - propably need to add some try except
+# - fix number of columns for leagues with matches (cant save to xlsx) - some try except are bad because both parts do execute
 # - function that takes str with text and prints time and that str - what currently happens in script
 # - use webdriverwait instead time.sleep
 # - 
@@ -161,23 +161,32 @@ for url in urls:
                 
         try: 
             referee = soup.find("div", class_="content")
-            match.append(referee.text[9:-2])
+            if 'Referee' in referee.text:    
+                match.append(referee.text[9:-2])
+            else:
+                match.append('')
         except:
             match.append('')
             
-        odd = soup.find('tr', class_ = 'odd')
-        odds = odd.find_all(class_ = 'odds-wrap')
-        
-        for odd in odds:
-            #print(odd['alt'])
-            odd1 = odd['alt'][:4]
-            odd2 = odd['alt'][-4:]
+        try:
+            odd = soup.find('tr', class_ = 'odd')
+            odds = odd.find_all(class_ = 'odds-wrap')
+            for odd in odds:
+                #print(odd['alt'])
+                odd1 = odd['alt'][:4]
+                odd2 = odd['alt'][-4:]
+                
+                match.append(odd1)
+                match.append(odd2)
+                #print(odd1)
+                #print(odd2)
+        except:
+            list_empty_str = []
+            for i in range(6):
+                list_empty_str.append('')
+            match.extend(list_empty_str)
+            print('no odds for that match')
             
-            match.append(odd1)
-            match.append(odd2)
-            #print(odd1)
-            #print(odd2)
-        
         scores = soup.find_all(class_='scoreboard')
         for score in scores:    
             #print(score.text)
@@ -203,6 +212,7 @@ for url in urls:
         #STATS
         ###
         try:
+            print('try stats')
             soup = driver_get_source(url_match_stats)
             
             stats_home = soup.find_all(class_="statText statText--homeValue")
@@ -222,6 +232,7 @@ for url in urls:
             #print(statistics)
             #print(len(statistics))
         except:
+            print('except stats')
             #putting '' in place if no match stats for that match
             list_empty_str = []
             for i in range(3*len(stats)):
@@ -233,6 +244,7 @@ for url in urls:
         #LINEUPS
         ###
         try:
+            print('try lineups')
             soup = driver_get_source(url_lineups)
             
             lineups = soup.find('table', class_='parts')
@@ -273,6 +285,7 @@ for url in urls:
             match.extend(names_home)
             match.extend(names_away)
         except:
+            print('except lineups')
             #putting '' in place if no lineups for that match
             list_empty_str = []
             for i in range(40):
@@ -342,6 +355,10 @@ for url in urls:
         
         end = time.time()
         print(str(len(matches)) + " - " + str(end-start))
+    
+        print(len(match))
+        print(match)
+    
     
     df = pd.DataFrame(matches, columns = column_names)
     #print(df[['home_odds_orginal','home_odds_final']].head())
