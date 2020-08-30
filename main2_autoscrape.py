@@ -211,8 +211,12 @@ for url in urls:
         ###
         #STATS
         ###
-        try:
-            print('try stats')
+        
+        match_stats = soup.find('li', id='li-match-statistics')
+        match_lineups = soup.find('li', id='li-match-lineups')
+        
+        if match_stats != None:
+            print('a-match-statistics')
             soup = driver_get_source(url_match_stats)
             
             stats_home = soup.find_all(class_="statText statText--homeValue")
@@ -228,22 +232,22 @@ for url in urls:
                     j += 1
                 else:
                     match.extend(['', ''])
-                    
+
             #print(statistics)
             #print(len(statistics))
-        except:
-            print('except stats')
+        else:
+            print('no a-match-statistics')
             #putting '' in place if no match stats for that match
             list_empty_str = []
-            for i in range(3*len(stats)):
+            for i in range(6*len(stats)):
                 list_empty_str.append('')
             match.extend(list_empty_str)
-            
+
             
         ###
         #LINEUPS
         ###
-        try:
+        if match_lineups != None:
             print('try lineups')
             soup = driver_get_source(url_lineups)
             
@@ -284,7 +288,7 @@ for url in urls:
                     
             match.extend(names_home)
             match.extend(names_away)
-        except:
+        else:
             print('except lineups')
             #putting '' in place if no lineups for that match
             list_empty_str = []
