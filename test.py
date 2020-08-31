@@ -10,7 +10,7 @@ URL2 = 'https://www.flashscore.com/match/2JDks1o7/#match-statistics;0'
 URL3 = 'https://www.flashscore.com/match/2JDks1o7/#lineups;1'
 #page = requests.get(URL).text
 
-driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
+'''driver = webdriver.Chrome('C:/Users/Maciek/Desktop/Programy/chromedriver.exe') 
 driver.get(URL2)
 
 time.sleep(2)
@@ -20,16 +20,20 @@ page = driver.page_source
 soup = BeautifulSoup(page, 'html.parser')
 
 driver.quit()
-
-def get_urls_xlsx(path):
+'''
+def set_urls_xlsx(path):
     df = pd.read_excel(path, usecols = ['URL', 'Done'])
-    print(df)
-    done = df['Done'].notnull().sum()
-    print(done)
-    urls = df['URL'][done:].to_list()
-    return urls
+    urls = df['URL'].tolist()
+    done1 = df['Done'].tolist()
+    i = 0
+    while done1[i]=='x':
+        print(i)
+        i += 1
     
-get_urls_xlsx('C:/Users/Maciek/Desktop/python_projects/flashscore_scraper/urls.xlsx')
+    df.at[i, 'Done'] = 'x'
+    df.to_excel(path)
     
-url = 'https://www.flashscore.com/football/germany/bundesliga-2016-2017/results/'
-print(url.split('/')[-3])
+set_urls_xlsx('C:/Users/Maciek/Desktop/python_projects/flashscore_scraper/urls.xlsx')
+    
+#url = 'https://www.flashscore.com/football/germany/bundesliga-2016-2017/results/'
+#print(url.split('/')[-3])

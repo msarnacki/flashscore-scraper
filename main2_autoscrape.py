@@ -56,14 +56,23 @@ def driver_get_source(url):
     return soup
 
 def get_urls_xlsx(path):
+    urls= []
     df = pd.read_excel(path, usecols = ['URL', 'Done'])
-    done = df['Done'].notnull().sum()
-    urls = df['URL'][done:].to_list()
-    return urls, done
+    urls1 = df['URL'].tolist()
+    done1 = df['Done'].tolist()
+    for i in range(len(urls1)):
+        if done1[i] != 'x':
+            urls.append(urls1[i])
+    return urls
 
-def set_urls_xlsx(done, path):
+def set_urls_xlsx(path):
     df = pd.read_excel(path, usecols = ['URL', 'Done'])
-    df.at[done, 'Done'] = 'x'
+    urls = df['URL'].tolist()
+    done1 = df['Done'].tolist()
+    i = 0
+    while done1[i]=='x':
+        i += 1
+    df.at[i, 'Done'] = 'x'
     df.to_excel(path)
     
 ### list with column names
@@ -108,7 +117,9 @@ url_match_prefix = 'https://www.flashscore.com/match/'
 # get source code from main page with results
 ###
 
-urls, url_num = get_urls_xlsx('C:/Users/Maciek/Desktop/python_projects/flashscore_scraper/urls.xlsx')
+urls = get_urls_xlsx('C:/Users/Maciek/Desktop/python_projects/flashscore_scraper/urls.xlsx')
+
+print(len(urls))
 
 for url in urls:
     soup = driver_get_source(url)
@@ -132,8 +143,8 @@ for url in urls:
     
     matches = []
     
-    for id in ids[:2]:  
-    #for id in ids:    
+    #for id in ids[:2]:  
+    for id in ids:    
         match = []
         match.append(id)
         
@@ -193,7 +204,7 @@ for url in urls:
             for i in range(6):
                 list_empty_str.append('')
             match.extend(list_empty_str)
-            print('no odds for that match')
+            #print('no odds for that match')
             
         scores = soup.find_all(class_='scoreboard')
         for score in scores:    
@@ -224,7 +235,7 @@ for url in urls:
         match_lineups = soup.find('li', id='li-match-lineups')
         
         if match_stats != None:
-            print('a-match-statistics')
+            #print('a-match-statistics')
             soup = driver_get_source(url_match_stats)
             
             stats_home = soup.find_all(class_="statText statText--homeValue")
@@ -244,7 +255,7 @@ for url in urls:
             #print(statistics)
             #print(len(statistics))
         else:
-            print('no a-match-statistics')
+            #print('no a-match-statistics')
             #putting '' in place if no match stats for that match
             list_empty_str = []
             for i in range(6*len(stats)):
@@ -256,7 +267,7 @@ for url in urls:
         #LINEUPS
         ###
         if match_lineups != None:
-            print('try lineups')
+            #print('try lineups')
             soup = driver_get_source(url_lineups)
             
             lineups = soup.find('table', class_='parts')
@@ -297,7 +308,7 @@ for url in urls:
             match.extend(names_home)
             match.extend(names_away)
         else:
-            print('except lineups')
+            #print('except lineups')
             #putting '' in place if no lineups for that match
             list_empty_str = []
             for i in range(40):
@@ -368,8 +379,8 @@ for url in urls:
         end = time.time()
         print(str(len(matches)) + " - " + str(end-start))
     
-        print(len(match))
-        print(match)
+        #print(len(match))
+        #print(match)
     
     
     df = pd.DataFrame(matches, columns = column_names)
@@ -377,8 +388,7 @@ for url in urls:
     ### SEASON SAVE DATA
     df.to_excel('data/' + url.split('/')[-3] + ".xlsx")
     
-    set_urls_xlsx(url_num, 'C:/Users/Maciek/Desktop/python_projects/flashscore_scraper/urls.xlsx')
-    url_num += 1
+    set_urls_xlsx('C:/Users/Maciek/Desktop/python_projects/flashscore_scraper/urls.xlsx')
 
     
     
