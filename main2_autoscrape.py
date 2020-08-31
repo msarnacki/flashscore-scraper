@@ -12,7 +12,7 @@ import pandas as pd
 
 #########################################################
 # TODO:
-# - fix number of columns for leagues with matches (cant save to xlsx) - some try except are bad because both parts do execute
+# - test scraping many different leagues
 # - function that takes str with text and prints time and that str - what currently happens in script
 # - use webdriverwait instead time.sleep
 # - 
@@ -66,12 +66,12 @@ def set_urls_xlsx(done, path):
     df.at[done, 'Done'] = 'x'
     df.to_excel(path)
     
-################################
+### list with column names
 incidents_cols = []
 for i in range(30):
     incidents_cols.append("incident_"+str(i+1))
 
-column_names = ['match_id', 'home_team', 'away_team', 'referee', 'home_odds_orginal','home_odds_final', 'draw_odds_orginal','draw_odds_final', 'away_odds_orginal','away_odds_final', 
+column_names = ['match_id', 'league_round', 'date_time', 'home_team', 'away_team', 'referee', 'home_odds_orginal','home_odds_final', 'draw_odds_orginal','draw_odds_final', 'away_odds_orginal','away_odds_final', 
                 'FT_home_sc', 'FT_away_sc', 'FH_home_sc', 'FH_away_sc', 'SH_home_sc', 'SH_away_sc',
                 'FT_home_possession','FT_away_possession', 'FT_home_goal_attempts', 'FT_away_goal_attempts', 'FT_home_shots_on_goal', 'FT_away_shots_on_goal',
                 'FT_home_shots_off_goal', 'FT_away_shots_off_goal', 'FT_home_blocked_shots', 'FT_away_blocked_shots', 'FT_home_freekicks', 'FT_away_freekicks',
@@ -94,7 +94,6 @@ column_names = ['match_id', 'home_team', 'away_team', 'referee', 'home_odds_orgi
                 'away_sub_1', 'away_sub_2', 'away_sub_3', 'away_sub_4', 'away_sub_5', 'away_sub_6', 'away_sub_7', 'away_sub_8', 'away_sub_9']
 
 column_names.extend(incidents_cols)
-#################################
 
 stats = ['Ball Possession', 'Goal Attempts', 'Shots on Goal', 'Shots off Goal', 'Blocked Shots', 'Free Kicks', 'Corner Kicks',
          'Offsides', 'Goalkeeper Saves', 'Fouls', 'Red Cards', 'Yellow Cards', 'Total Passes', 'Completed Passes', 'Tackles',
@@ -151,6 +150,15 @@ for url in urls:
         
         #print(url_match_summary)
         soup = driver_get_source(url_match_summary)
+        
+        # match description
+        league_round = soup.find('span', class_ = 'description__country').find('a').text
+        #print(league_round)
+        match.append(league_round)
+        
+        date_time = soup.find('div', class_ = 'description__time').text
+        #print(date_time)
+        match.append(date_time)
         
         teams1 = soup.find_all("div", {"class":"tname__text"})
         for teams in teams1:
