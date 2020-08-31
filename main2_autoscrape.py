@@ -119,7 +119,7 @@ url_match_prefix = 'https://www.flashscore.com/match/'
 
 urls = get_urls_xlsx('C:/Users/Maciek/Desktop/python_projects/flashscore_scraper/urls.xlsx')
 
-print(len(urls))
+#print(len(urls))
 
 for url in urls:
     soup = driver_get_source(url)
@@ -191,10 +191,12 @@ for url in urls:
             odd = soup.find('tr', class_ = 'odd')
             odds = odd.find_all(class_ = 'odds-wrap')
             for odd in odds:
-                #print(odd['alt'])
-                odd1 = odd['alt'][:4]
-                odd2 = odd['alt'][-4:]
-                
+                if '[' in odd['eu']:
+                    odd1 = odd['eu'].split('[')[0]
+                    odd2 = odd['eu'].split(']')[1]
+                else:
+                    odd1 = odd['eu']
+                    odd2 = odd.text
                 match.append(odd1)
                 match.append(odd2)
                 #print(odd1)
