@@ -12,7 +12,6 @@ import pandas as pd
 
 #########################################################
 # TODO:
-# - test scraping many different leagues
 # - function that takes str with text and prints time and that str - what currently happens in script
 # - use webdriverwait instead time.sleep
 # - 
@@ -67,7 +66,6 @@ def get_urls_xlsx(path):
 
 def set_urls_xlsx(path):
     df = pd.read_excel(path, usecols = ['URL', 'Done'])
-    urls = df['URL'].tolist()
     done1 = df['Done'].tolist()
     i = 0
     while done1[i]=='x':
@@ -145,8 +143,7 @@ for url in urls:
     
     #for id in ids[:2]:  
     for id in ids:    
-        match = []
-        match.append(id)
+        match = [] 
         
         ###urls for match
         url_match_summary = url_match_prefix+id+'/#match-summary'
@@ -161,6 +158,12 @@ for url in urls:
         
         #print(url_match_summary)
         soup = driver_get_source(url_match_summary)
+        
+        ### skipping awarded matches
+        if soup.find('div', class_ = 'info-status').text == 'Awarded':
+            continue
+        
+        match.append(id)
         
         # match description
         league_round = soup.find('span', class_ = 'description__country').find('a').text
@@ -177,6 +180,8 @@ for url in urls:
             for team in teams2:
                 #print(team.text)
                 match.append(team.text)
+                
+        
                 
         try: 
             referee = soup.find("div", class_="content")
