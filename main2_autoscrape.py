@@ -72,7 +72,10 @@ def set_urls_xlsx(path):
         i += 1
     df.at[i, 'Done'] = 'x'
     df.to_excel(path)
-    
+
+def print_progress(match_num, season):
+    print('Match ' + str(match_num) + ' in ' + season + ' - Time spent: ' + str(round(time.time() - start, 2)) + ' seconds')
+
 ### list with column names
 incidents_cols = []
 for i in range(30):
@@ -383,13 +386,8 @@ for url in urls:
             match.append('')
         matches.append(match)
         
-        end = time.time()
-        print(str(len(matches)) + " - " + str(end-start))
-    
-        #print(len(match))
-        #print(match)
-    
-    
+        print_progress(len(matches), url.split('/')[-3])
+
     df = pd.DataFrame(matches, columns = column_names)
     #print(df[['home_odds_orginal','home_odds_final']].head())
     ### SEASON SAVE DATA
