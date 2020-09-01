@@ -118,8 +118,8 @@ url_match_prefix = 'https://www.flashscore.com/match/'
 # get source code from main page with results
 ###
 
-urls = get_urls_xlsx('C:/Users/Maciek/Desktop/python_projects/flashscore_scraper/urls.xlsx')
-
+#urls = get_urls_xlsx('C:/Users/Maciek/Desktop/python_projects/flashscore_scraper/urls.xlsx')
+urls = get_urls_xlsx('C:/Users/Maciej/Desktop/python_projects/flashscore-scraper/urls.xlsx')
 #print(len(urls))
 
 for url in urls:
