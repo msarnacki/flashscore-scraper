@@ -80,32 +80,48 @@ incidents_cols = []
 for i in range(30):
     incidents_cols.append("incident_"+str(i+1))
 
-column_names = ['match_id', 'league_round', 'date_time', 'home_team', 'away_team', 'referee', 'home_odds_orginal','home_odds_final', 'draw_odds_orginal','draw_odds_final', 'away_odds_orginal','away_odds_final', 
+column_names = ['match_id', 'league_round', 'date_time', 'home_team', 'away_team', 'referee', 
+                'home_odds_orginal','home_odds_final', 'draw_odds_orginal','draw_odds_final', 'away_odds_orginal','away_odds_final', 
                 'FT_home_sc', 'FT_away_sc', 'FH_home_sc', 'FH_away_sc', 'SH_home_sc', 'SH_away_sc',
-                'FT_home_possession','FT_away_possession', 'FT_home_goal_attempts', 'FT_away_goal_attempts', 'FT_home_shots_on_goal', 'FT_away_shots_on_goal',
-                'FT_home_shots_off_goal', 'FT_away_shots_off_goal', 'FT_home_blocked_shots', 'FT_away_blocked_shots', 'FT_home_freekicks', 'FT_away_freekicks',
-                'FT_home_corners', 'FT_away_corners', 'FT_home_offsides', 'FT_away_offsides', 'FT_home_gk_saves', 'FT_away_gk_saves', 'FT_home_fouls', 'FT_away_fouls',
-                'FT_home_red_cards', 'FT_away_red_cards','FT_home_yellow_cards', 'FT_away_yellow_cards', 'FT_home_passes', 'FT_away_passes', 'FT_home_passes_completed', 
-                'FT_away_passes_completed', 'FT_home_tackles', 'FT_away_tackles', 'FT_home_attacks', 'FT_away_attacks', 'FT_home_dangerous_attacks', 'FT_away_dangerous_attacks',
-                'FH_home_possession','FH_away_possession', 'FH_home_goal_attempts', 'FH_away_goal_attempts', 'FH_home_shots_on_goal', 'FH_away_shots_on_goal',
-                'FH_home_shots_off_goal', 'FH_away_shots_off_goal', 'FH_home_blocked_shots', 'FH_away_blocked_shots', 'FH_home_freekicks', 'FH_away_freekicks',
-                'FH_home_corners', 'FH_away_corners', 'FH_home_offsides', 'FH_away_offsides', 'FH_home_gk_saves', 'FH_away_gk_saves', 'FH_home_fouls', 'FH_away_fouls',
-                'FH_home_red_cards', 'FH_away_red_cards', 'FH_home_yellow_cards', 'FH_away_yellow_cards', 'FH_home_passes', 'FH_away_passes', 'FH_home_passes_completed', 
-                'FH_away_passes_completed', 'FH_home_tackles', 'FH_away_tackles', 'FH_home_attacks', 'FH_away_attacks', 'FH_home_dangerous_attacks', 'FH_away_dangerous_attacks',
-                'SH_home_possession','SH_away_possession', 'SH_home_goal_attempts', 'SH_away_goal_attempts', 'SH_home_shots_on_goal', 'SH_away_shots_on_goal',
-                'SH_home_shots_off_goal', 'SH_away_shots_off_goal', 'SH_home_blocked_shots', 'SH_away_blocked_shots', 'SH_home_freekicks', 'SH_away_freekicks',
-                'SH_home_corners', 'SH_away_corners', 'SH_home_offsides', 'SH_away_offsides', 'SH_home_gk_saves', 'SH_away_gk_saves', 'SH_home_fouls', 'SH_away_fouls',
-                'SH_home_red_cards', 'SH_away_red_cards', 'SH_home_yellow_cards', 'SH_away_yellow_cards', 'SH_home_passes', 'SH_away_passes', 'SH_home_passes_completed',
-                'SH_away_passes_completed', 'SH_home_tackles', 'SH_away_tackles', 'SH_home_attacks', 'SH_away_attacks', 'SH_home_dangerous_attacks', 'SH_away_dangerous_attacks',
-                'home_player_1', 'home_player_2', 'home_player_3', 'home_player_4', 'home_player_5', 'home_player_6', 'home_player_7', 'home_player_8', 'home_player_9', 'home_player_10',  'home_player_11',
-                'home_sub_1', 'home_sub_2', 'home_sub_3', 'home_sub_4', 'home_sub_5', 'home_sub_6', 'home_sub_7', 'home_sub_8', 'home_sub_9',
-                'away_player_1', 'away_player_2', 'away_player_3', 'away_player_4', 'away_player_5', 'away_player_6', 'away_player_7', 'away_player_8', 'away_player_9', 'away_player_10',  'away_player_11',
-                'away_sub_1', 'away_sub_2', 'away_sub_3', 'away_sub_4', 'away_sub_5', 'away_sub_6', 'away_sub_7', 'away_sub_8', 'away_sub_9']
+                'FT_home_possession','FT_away_possession', 'FT_home_goal_attempts', 'FT_away_goal_attempts', 
+                'FT_home_shots_on_goal', 'FT_away_shots_on_goal', 'FT_home_shots_off_goal', 'FT_away_shots_off_goal', 
+                'FT_home_blocked_shots', 'FT_away_blocked_shots', 'FT_home_freekicks', 'FT_away_freekicks',
+                'FT_home_corners', 'FT_away_corners', 'FT_home_offsides', 'FT_away_offsides', 'FT_home_throw_in', 'FT_away_throw_in', 
+                'FT_home_gk_saves', 'FT_away_gk_saves', 'FT_home_fouls', 'FT_away_fouls',
+                'FT_home_red_cards', 'FT_away_red_cards','FT_home_yellow_cards', 'FT_away_yellow_cards', 
+                'FT_home_passes', 'FT_away_passes', 'FT_home_passes_completed', 'FT_away_passes_completed', 
+                'FT_home_tackles', 'FT_away_tackles', 'FT_home_attacks', 'FT_away_attacks', 
+                'FT_home_dangerous_attacks', 'FT_away_dangerous_attacks', 'FH_home_possession','FH_away_possession', 
+                'FH_home_goal_attempts', 'FH_away_goal_attempts', 'FH_home_shots_on_goal', 'FH_away_shots_on_goal',
+                'FH_home_shots_off_goal', 'FH_away_shots_off_goal', 'FH_home_blocked_shots', 'FH_away_blocked_shots', 
+                'FH_home_freekicks', 'FH_away_freekicks', 'FH_home_corners', 'FH_away_corners', 
+                'FH_home_offsides', 'FH_away_offsides', 'FH_home_throw_in', 'FH_away_throw_in', 'FH_home_gk_saves', 'FH_away_gk_saves', 
+                'FH_home_fouls', 'FH_away_fouls', 'FH_home_red_cards', 'FH_away_red_cards', 
+                'FH_home_yellow_cards', 'FH_away_yellow_cards', 'FH_home_passes', 'FH_away_passes', 
+                'FH_home_passes_completed', 'FH_away_passes_completed', 'FH_home_tackles', 'FH_away_tackles', 
+                'FH_home_attacks', 'FH_away_attacks', 'FH_home_dangerous_attacks', 'FH_away_dangerous_attacks',
+                'SH_home_possession','SH_away_possession', 'SH_home_goal_attempts', 'SH_away_goal_attempts', 
+                'SH_home_shots_on_goal', 'SH_away_shots_on_goal', 'SH_home_shots_off_goal', 'SH_away_shots_off_goal', 
+                'SH_home_blocked_shots', 'SH_away_blocked_shots', 'SH_home_freekicks', 'SH_away_freekicks',
+                'SH_home_corners', 'SH_away_corners', 'SH_home_offsides', 'SH_away_offsides', 'SH_home_throw_in', 'SH_away_throw_in',
+                'SH_home_gk_saves', 'SH_away_gk_saves', 'SH_home_fouls', 'SH_away_fouls',
+                'SH_home_red_cards', 'SH_away_red_cards', 'SH_home_yellow_cards', 'SH_away_yellow_cards', 
+                'SH_home_passes', 'SH_away_passes', 'SH_home_passes_completed', 'SH_away_passes_completed', 
+                'SH_home_tackles', 'SH_away_tackles', 'SH_home_attacks', 'SH_away_attacks', 
+                'SH_home_dangerous_attacks', 'SH_away_dangerous_attacks',
+                'home_player_1', 'home_player_2', 'home_player_3', 'home_player_4', 'home_player_5', 
+                'home_player_6', 'home_player_7', 'home_player_8', 'home_player_9', 'home_player_10',  
+                'home_player_11', 'home_sub_1', 'home_sub_2', 'home_sub_3', 'home_sub_4', 
+                'home_sub_5', 'home_sub_6', 'home_sub_7', 'home_sub_8', 'home_sub_9',
+                'away_player_1', 'away_player_2', 'away_player_3', 'away_player_4', 'away_player_5', 
+                'away_player_6', 'away_player_7', 'away_player_8', 'away_player_9', 'away_player_10', 
+                'away_player_11', 'away_sub_1', 'away_sub_2', 'away_sub_3', 'away_sub_4', 
+                'away_sub_5', 'away_sub_6', 'away_sub_7', 'away_sub_8', 'away_sub_9']
 
 column_names.extend(incidents_cols)
 
 stats = ['Ball Possession', 'Goal Attempts', 'Shots on Goal', 'Shots off Goal', 'Blocked Shots', 'Free Kicks', 'Corner Kicks',
-         'Offsides', 'Goalkeeper Saves', 'Fouls', 'Red Cards', 'Yellow Cards', 'Total Passes', 'Completed Passes', 'Tackles',
+         'Offsides', 'Throw-in', 'Goalkeeper Saves', 'Fouls', 'Red Cards', 'Yellow Cards', 'Total Passes', 'Completed Passes', 'Tackles',
          'Attacks', 'Dangerous Attacks']
 
 ### URLS
@@ -157,7 +173,6 @@ for url in urls:
         ###
         #MATCH SUMMARY
         ###
-        
         #print(url_match_summary)
         soup = driver_get_source(url_match_summary)
         
@@ -182,9 +197,7 @@ for url in urls:
             for team in teams2:
                 #print(team.text)
                 match.append(team.text)
-                
         
-                
         try: 
             referee = soup.find("div", class_="content")
             if 'Referee' in referee.text:    
@@ -249,20 +262,26 @@ for url in urls:
             
             stats_home = soup.find_all(class_="statText statText--homeValue")
             stats_away = soup.find_all(class_="statText statText--awayValue")
-            #adding stats to the list (home > away > home > ...), match, 1 half, 2 half - 15 stats for each
-            #statistics = []
-            j = 0
-            for i in range(3*len(stats)):
-                # j%len(stats_home) - dzieki temu j nie przekroczy indeksu (wyzeruje sie gdy skoncza sie stats_home wiec wpisane zostana dalej '')
-                if stats_home[j%len(stats_home)].findNext('div').text == stats[i%len(stats)]:
-                    match.append(stats_home[j].text)
-                    match.append(stats_away[j].text)
-                    j += 1
-                else:
-                    match.extend(['', ''])
-
-            #print(statistics)
-            #print(len(statistics))
+            if (len(stats_home) == 0) or(len(stats_away) == 0):
+                list_empty_str = []
+                for i in range(6*len(stats)):
+                    list_empty_str.append('')
+                match.extend(list_empty_str)
+            else:
+                #adding stats to the list (home > away > home > ...), match, 1 half, 2 half - 15 stats for each
+                #statistics = []
+                j = 0
+                for i in range(3*len(stats)):
+                    # j%len(stats_home) - dzieki temu j nie przekroczy indeksu (wyzeruje sie gdy skoncza sie stats_home wiec wpisane zostana dalej '')
+                    if stats_home[j%len(stats_home)].findNext('div').text == stats[i%len(stats)]:
+                        match.append(stats_home[j].text)
+                        match.append(stats_away[j].text)
+                        j += 1
+                    else:
+                        match.extend(['', ''])
+    
+                #print(statistics)
+                #print(len(statistics))
         else:
             #print('no a-match-statistics')
             #putting '' in place if no match stats for that match
