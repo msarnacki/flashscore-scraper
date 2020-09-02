@@ -160,7 +160,7 @@ for url in urls:
     matches = []
     
     #for id in ids[:2]:  
-    for id in ids[210:]:    
+    for id in ids:    
         match = [] 
         
         ###urls for match
