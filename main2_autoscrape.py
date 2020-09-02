@@ -160,7 +160,7 @@ for url in urls:
     matches = []
     
     #for id in ids[:2]:  
-    for id in ids:    
+    for id in ids[210:]:    
         match = [] 
         
         ###urls for match
@@ -262,6 +262,7 @@ for url in urls:
             
             stats_home = soup.find_all(class_="statText statText--homeValue")
             stats_away = soup.find_all(class_="statText statText--awayValue")
+            
             if (len(stats_home) == 0) or(len(stats_away) == 0):
                 list_empty_str = []
                 for i in range(6*len(stats)):
@@ -279,7 +280,10 @@ for url in urls:
                         j += 1
                     else:
                         match.extend(['', ''])
-    
+                        
+                    #break for loop (case when the next iteration makes sense but j would go over stats_home size) 
+                    if j >= len(stats_home):
+                        break
                 #print(statistics)
                 #print(len(statistics))
         else:
