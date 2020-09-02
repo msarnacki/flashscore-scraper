@@ -9,6 +9,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 import re
 import pandas as pd
+import os
 
 #########################################################
 # TODO:
@@ -52,24 +53,24 @@ def driver_get_source(url):
     soup = BeautifulSoup(page, 'html.parser')
     return soup
 
-def get_urls_xlsx(path):
-    urls= []
-    df = pd.read_excel(path, usecols = ['URL', 'Done'])
+def get_urls_xlsx(path_urls, path_data):
+    df = pd.read_excel(path_urls, usecols = ['URL'])
     urls1 = df['URL'].tolist()
-    done1 = df['Done'].tolist()
-    for i in range(len(urls1)):
-        if done1[i] != 'x':
-            urls.append(urls1[i])
-    return urls
+    #print(urls1)
+    
+    file_names = os.listdir(path_data)
+    #print(file_names)
+    files_league = [f.split('.')[0] for f in file_names]
+    #print(files_league)
+    
+    urls2 = []
+    for url in urls1:
+        url_league = url.split('/')[-3]   
+        if (url_league not in files_league) and (url_league != ''):
+           urls2.append(url)
 
-def set_urls_xlsx(path):
-    df = pd.read_excel(path, usecols = ['URL', 'Done'])
-    done1 = df['Done'].tolist()
-    i = 0
-    while done1[i]=='x':
-        i += 1
-    df.at[i, 'Done'] = 'x'
-    df.to_excel(path)
+    #print(urls2)
+    return urls2
 
 def print_progress(match_num, season):
     print('Match ' + str(match_num) + ' in ' + season + ' - Time spent: ' + str(round(time.time() - start, 2)) + ' seconds')
@@ -112,12 +113,12 @@ stats = ['Ball Possession', 'Goal Attempts', 'Shots on Goal', 'Shots off Goal', 
 #url_results = 'https://www.flashscore.com/football/england/premier-league-2018-2019/results/'
 url_match_prefix = 'https://www.flashscore.com/match/'
 urls_path = 'urls.xlsx'
-
+data_path = 'data'
 ###
 # get source code from main page with results
 ###
 
-urls = get_urls_xlsx(urls_path)
+urls = get_urls_xlsx(urls_path, data_path)
 #print(len(urls))
 
 for url in urls:
@@ -390,9 +391,5 @@ for url in urls:
     #print(df[['home_odds_orginal','home_odds_final']].head())
     ### SEASON SAVE DATA
     df.to_excel('data/' + url.split('/')[-3] + ".xlsx")
-    
-    set_urls_xlsx(urls_path)
-
-    
     
 driver.quit()
