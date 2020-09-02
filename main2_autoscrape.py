@@ -111,12 +111,13 @@ stats = ['Ball Possession', 'Goal Attempts', 'Shots on Goal', 'Shots off Goal', 
 #url_results = 'https://www.flashscore.com/football/england/premier-league-2019-2020/results/'
 #url_results = 'https://www.flashscore.com/football/england/premier-league-2018-2019/results/'
 url_match_prefix = 'https://www.flashscore.com/match/'
+urls_path = 'urls.xlsx'
 
 ###
 # get source code from main page with results
 ###
 
-urls = get_urls_xlsx('urls.xlsx')
+urls = get_urls_xlsx(urls_path)
 #print(len(urls))
 
 for url in urls:
@@ -390,7 +391,7 @@ for url in urls:
     ### SEASON SAVE DATA
     df.to_excel('data/' + url.split('/')[-3] + ".xlsx")
     
-    set_urls_xlsx('C:/Users/Maciek/Desktop/python_projects/flashscore_scraper/urls.xlsx')
+    set_urls_xlsx(urls_path)
 
     
     
