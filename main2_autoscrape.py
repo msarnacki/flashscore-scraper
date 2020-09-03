@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import TimeoutException
 
 import re
 import pandas as pd
@@ -52,6 +53,43 @@ def driver_get_source(url):
     page = driver.page_source
     soup = BeautifulSoup(page, 'html.parser')
     return soup
+
+
+
+
+
+
+
+def driver_get_source_match_summary(url):
+    driver.get(url)
+    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'summary-content')))
+
+    page = driver.page_source
+    soup = BeautifulSoup(page, 'html.parser')
+    return soup
+
+def driver_get_source_match_stats(url):
+    driver.get(url)
+    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'statContent')))
+
+    page = driver.page_source
+    soup = BeautifulSoup(page, 'html.parser')
+    return soup
+    
+def driver_get_source_match_lineups(url):
+    driver.get(url)
+    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'lineups-wrapper')))
+    
+    page = driver.page_source
+    soup = BeautifulSoup(page, 'html.parser')
+    return soup
+
+
+
+
+
+
+
 
 def get_urls_xlsx(path_urls, path_data):
     df = pd.read_excel(path_urls, usecols = ['URL'])
@@ -174,7 +212,7 @@ for url in urls:
         #MATCH SUMMARY
         ###
         #print(url_match_summary)
-        soup = driver_get_source(url_match_summary)
+        soup = driver_get_source_match_summary(url_match_summary)
         
         ### skipping awarded matches
         if soup.find('div', class_ = 'info-status').text == 'Awarded':
@@ -258,7 +296,7 @@ for url in urls:
         
         if match_stats != None:
             #print('a-match-statistics')
-            soup = driver_get_source(url_match_stats)
+            soup = driver_get_source_match_stats(url_match_stats)
             
             stats_home = soup.find_all(class_="statText statText--homeValue")
             stats_away = soup.find_all(class_="statText statText--awayValue")
@@ -300,7 +338,7 @@ for url in urls:
         ###
         if match_lineups != None:
             #print('try lineups')
-            soup = driver_get_source(url_lineups)
+            soup = driver_get_source_match_lineups(url_lineups)
             
             lineups = soup.find('table', class_='parts')
             #print(lineups)
