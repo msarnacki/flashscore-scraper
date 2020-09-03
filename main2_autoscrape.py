@@ -90,7 +90,6 @@ def driver_get_source_match_lineups(url):
 
 
 
-
 def get_urls_xlsx(path_urls, path_data):
     df = pd.read_excel(path_urls, usecols = ['URL'])
     urls1 = df['URL'].tolist()
