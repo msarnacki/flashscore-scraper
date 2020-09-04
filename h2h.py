@@ -3,6 +3,19 @@ import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
+def get_matches_info(matches, how_many):
+    for i, match in enumerate(matches):
+        if i == how_many:
+            break
+        
+        teams = match.find_all(class_ = 'name')
+        team1 = teams[0].text
+        team2 = teams[1].text
+    
+        score = match.find(class_ = 'score').text
+        
+        print(str(i) + '. ' + team1 + ' ' + score + ' ' + team2)
+
 
 driver = webdriver.Chrome() 
 #driver = webdriver.Firefox() 
@@ -51,11 +64,23 @@ soup = BeautifulSoup(page, 'html.parser')
 #this line takes only matches from {Overall} section in H2H and not from {HOMETEAM - Home} or {AWAYTEAM - Away}
 overall = soup.find(id = 'tab-h2h-overall')
 
-#getting info about matches in overall section
-matches = overall.find_all(class_ = 'highlight')
-#print(matches)
+home_matches = overall.find(class_ = 'h2h_home').find_all(class_ = 'highlight')
+away_matches = overall.find(class_ = 'h2h_away').find_all(class_ = 'highlight')
+mutual_matches = overall.find(class_ = 'h2h_mutual').find_all(class_ = 'highlight')
 
-for i, match in enumerate(matches):
+#getting info about matches in overall section
+#matches = overall.find_all(class_ = 'highlight')
+#print(matches)
+print("Home team last matches")
+get_matches_info(home_matches, 15)
+
+print("Away team last matches")
+get_matches_info(away_matches, 15)
+
+print("VS each other last matches")
+get_matches_info(mutual_matches, 5)
+
+'''for i, match in enumerate(home_matches):
     teams = match.find_all(class_ = 'name')
     team1 = teams[0].text
     team2 = teams[1].text
@@ -64,6 +89,25 @@ for i, match in enumerate(matches):
     
     print(str(i) + '. ' + team1 + ' ' + score + ' ' + team2)
 
+for i, match in enumerate(away_matches):
+    teams = match.find_all(class_ = 'name')
+    team1 = teams[0].text
+    team2 = teams[1].text
+
+    score = match.find(class_ = 'score').text
+   
+    print(str(i) + '. ' + team1 + ' ' + score + ' ' + team2)
+
+
+for i, match in enumerate(mutual_matches):
+    teams = match.find_all(class_ = 'name')
+    team1 = teams[0].text
+    team2 = teams[1].text
+
+    score = match.find(class_ = 'score').text
+    
+    print(str(i) + '. ' + team1 + ' ' + score + ' ' + team2)
+'''
 # script scrapes more matches than 15 for a team, but if you want only 15 you could add some loops and if statements to get obly 15 for a team
 
 
