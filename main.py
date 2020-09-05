@@ -21,10 +21,10 @@ import os
 
 start = time.time()
 
-driver = webdriver.Chrome() 
-#driver = webdriver.Firefox() 
-#driver.fullscreen_window()
-driver.maximize_window()
+#driver = webdriver.Chrome() 
+driver = webdriver.Firefox() 
+driver.fullscreen_window()
+#driver.maximize_window()
 
 ### 
 # this part would appear multiple times in the code
@@ -270,22 +270,33 @@ for url in urls:
             #print(score.text)
             match.append(score.text)
         
-        h1_score_home = soup.find(class_="p1_home")
-        #print(h1_score_home.text[0])
-        match.append(h1_score_home.text[0])
+        try:
+            h1_score_home = soup.find(class_="p1_home")
+            #print(h1_score_home.text[0])
+            match.append(h1_score_home.text[0])
+        except:
+            match.append('')
         
-        h1_score_away = soup.find(class_="p1_away")
-        #print(h1_score_away.text[0])
-        match.append(h1_score_away.text[0])
+        try:
+            h1_score_away = soup.find(class_="p1_away")
+            #print(h1_score_away.text[0])
+            match.append(h1_score_away.text[0])
+        except:
+            match.append('')
         
-        h2_score_home = soup.find(class_="p2_home")
-        #print(h2_score_home.text[0])
-        match.append(h2_score_home.text[0])
+        try:
+            h2_score_home = soup.find(class_="p2_home")
+            #print(h2_score_home.text[0])
+            match.append(h2_score_home.text[0])
+        except:
+            match.append('')
         
-        h2_score_away = soup.find(class_="p2_away")
-        #print(h2_score_away.text[0])
-        match.append(h2_score_away.text[0])
-        
+        try:
+            h2_score_away = soup.find(class_="p2_away")
+            #print(h2_score_away.text[0])
+            match.append(h2_score_away.text[0])
+        except:
+            match.append('')
         ###
         #STATS
         ###
