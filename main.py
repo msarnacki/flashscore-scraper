@@ -14,7 +14,7 @@ import os
 
 #########################################################
 # TODO:
-# - use webdriverwait instead time.sleep
+# - something wrong with awaeded matches - loop breaks and not continue
 # - 
 # - 
 #########################################################
@@ -63,7 +63,8 @@ def driver_get_source(url):
 def driver_get_source_match_summary(url):
     driver.get(url)
     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'summary-content')))
-
+    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'team-primary-content')))
+    WebDriverWait(driver, 0.05)
     page = driver.page_source
     soup = BeautifulSoup(page, 'html.parser')
     return soup
@@ -71,7 +72,7 @@ def driver_get_source_match_summary(url):
 def driver_get_source_match_stats(url):
     driver.get(url)
     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'statContent')))
-
+    WebDriverWait(driver, 0.05)
     page = driver.page_source
     soup = BeautifulSoup(page, 'html.parser')
     return soup
@@ -79,7 +80,7 @@ def driver_get_source_match_stats(url):
 def driver_get_source_match_lineups(url):
     driver.get(url)
     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'lineups-wrapper')))
-    
+    WebDriverWait(driver, 0.05)
     page = driver.page_source
     soup = BeautifulSoup(page, 'html.parser')
     return soup
@@ -213,10 +214,6 @@ for url in urls:
         #print(url_match_summary)
         soup = driver_get_source_match_summary(url_match_summary)
         
-        ### skipping awarded matches
-        if soup.find('div', class_ = 'info-status').text == 'Awarded':
-            continue
-        
         match.append(id)
         
         # match description
@@ -264,11 +261,13 @@ for url in urls:
                 list_empty_str.append('')
             match.extend(list_empty_str)
             #print('no odds for that match')
-            
+        
         scores = soup.find_all(class_='scoreboard')
         for score in scores:    
             #print(score.text)
             match.append(score.text)
+        
+        #if soup.find('div', class_ = 'info-status').text == 'Finished':
         
         try:
             h1_score_home = soup.find(class_="p1_home")
