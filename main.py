@@ -54,12 +54,6 @@ def driver_get_source(url):
     soup = BeautifulSoup(page, 'html.parser')
     return soup
 
-
-
-
-
-
-
 def driver_get_source_match_summary(url):
     driver.get(url)
     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'summary-content')))
@@ -85,12 +79,6 @@ def driver_get_source_match_lineups(url):
     soup = BeautifulSoup(page, 'html.parser')
     return soup
 
-
-
-
-
-
-
 def get_urls_xlsx(path_urls, path_data):
     df = pd.read_excel(path_urls, usecols = ['URL'])
     urls1 = df['URL'].tolist()
@@ -103,7 +91,7 @@ def get_urls_xlsx(path_urls, path_data):
     
     urls2 = []
     for url in urls1:
-        url_league = url.split('/')[-3]   
+        url_league = url.split('/')[-4] + "_" + url.split('/')[-3]   
         if (url_league not in files_league) and (url_league != ''):
            urls2.append(url)
 
@@ -455,11 +443,11 @@ for url in urls:
             match.append('')
         matches.append(match)
         
-        print_progress(len(matches), url.split('/')[-3])
+        print_progress(len(matches), (url.split('/')[-4] + "_" + url.split('/')[-3])
 
     df = pd.DataFrame(matches, columns = column_names)
     #print(df[['home_odds_orginal','home_odds_final']].head())
     ### SEASON SAVE DATA
-    df.to_excel('data/' + url.split('/')[-3] + ".xlsx")
+    df.to_excel('data/' + url.split('/')[-4] + "_" + url.split('/')[-3] + ".xlsx")
     
 driver.quit()
