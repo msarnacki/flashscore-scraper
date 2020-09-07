@@ -58,7 +58,6 @@ def driver_get_source_match_summary(url):
     driver.get(url)
     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'summary-content')))
     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'team-primary-content')))
-    WebDriverWait(driver, 0.05)
     page = driver.page_source
     soup = BeautifulSoup(page, 'html.parser')
     return soup
@@ -66,7 +65,6 @@ def driver_get_source_match_summary(url):
 def driver_get_source_match_stats(url):
     driver.get(url)
     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'statContent')))
-    WebDriverWait(driver, 0.05)
     page = driver.page_source
     soup = BeautifulSoup(page, 'html.parser')
     return soup
@@ -74,7 +72,6 @@ def driver_get_source_match_stats(url):
 def driver_get_source_match_lineups(url):
     driver.get(url)
     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'lineups-wrapper')))
-    WebDriverWait(driver, 0.05)
     page = driver.page_source
     soup = BeautifulSoup(page, 'html.parser')
     return soup
@@ -151,8 +148,6 @@ stats = ['Ball Possession', 'Goal Attempts', 'Shots on Goal', 'Shots off Goal', 
          'Attacks', 'Dangerous Attacks']
 
 ### URLS
-#url_results = 'https://www.flashscore.com/football/england/premier-league-2019-2020/results/'
-#url_results = 'https://www.flashscore.com/football/england/premier-league-2018-2019/results/'
 url_match_prefix = 'https://www.flashscore.com/match/'
 urls_path = 'urls.xlsx'
 data_path = 'data'
@@ -437,13 +432,17 @@ for url in urls:
             incident_str = team + minute + incident_name + who + '-' + who2    
             #print(incident_str)
             match.append(incident_str)
+        
+        #reset page source if going from match summary to match summary
+        if match_stats == None and match_lineups == None:
+            driver.get('https://www.google.com')
             
         #print(match)
         while len(match) < len(column_names):
             match.append('')
         matches.append(match)
         
-        print_progress(len(matches), (url.split('/')[-4] + "_" + url.split('/')[-3])
+        print_progress(len(matches), (url.split('/')[-4] + "_" + url.split('/')[-3]))
 
     df = pd.DataFrame(matches, columns = column_names)
     #print(df[['home_odds_orginal','home_odds_final']].head())
