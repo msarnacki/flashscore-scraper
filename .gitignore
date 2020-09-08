@@ -1,3 +1,4 @@
 geckodriver.log
-data/
+data/*
+!data/france_ligue-1-2019-2020.xlsx
 .ipynb_checkpoints
