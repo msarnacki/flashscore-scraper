@@ -1,12 +1,10 @@
 import time
-import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.chrome.options import Options
 
 import re
 import pandas as pd
@@ -14,16 +12,20 @@ import os
 
 #########################################################
 # TODO:
-# - something wrong with awaeded matches - loop breaks and not continue
+# - problem when summary -> summary (there are no stats or lineups), for now there is resetting by loading google page
 # - 
 # - 
 #########################################################
 
 start = time.time()
 
+options = Options()
+options.add_argument("--kiosk")
+driver = webdriver.Chrome(options = options)
+
 #driver = webdriver.Chrome() 
-driver = webdriver.Firefox() 
-driver.fullscreen_window()
+#driver = webdriver.Firefox() 
+#driver.fullscreen_window()
 #driver.maximize_window()
 
 ### 
