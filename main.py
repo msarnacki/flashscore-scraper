@@ -97,8 +97,8 @@ def get_urls_xlsx(path_urls, path_data):
     #print(urls2)
     return urls2
 
-def print_progress(match_num, season):
-    print('Match ' + str(match_num) + ' in ' + season + ' - Time spent: ' + str(round(time.time() - start, 2)) + ' seconds')
+def print_progress(match_num, ids_num, season):
+    print('Match ' + str(match_num) + '/' + str(ids_num) + ' in ' + season + ' - Time spent: ' + str(round(time.time() - start, 2)) + ' seconds')
 
 ### list with column names
 incidents_cols = []
@@ -450,7 +450,7 @@ for url in urls:
             match.append('')
         matches.append(match)
         
-        print_progress(len(matches), (url.split('/')[-4] + "_" + url.split('/')[-3]))
+        print_progress(len(matches), len(ids), (url.split('/')[-4] + "_" + url.split('/')[-3]))
 
     df = pd.DataFrame(matches, columns = column_names)
     #print(df[['home_odds_orginal','home_odds_final']].head())
