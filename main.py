@@ -58,22 +58,22 @@ def driver_get_source(url):
 
 def driver_get_source_match_summary(url):
     driver.get(url)
-    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'summary-content')))
-    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'team-primary-content')))
+    WebDriverWait(driver, 8).until(EC.visibility_of_element_located((By.ID, 'summary-content')))
+    WebDriverWait(driver, 8).until(EC.visibility_of_element_located((By.CLASS_NAME, 'team-primary-content')))
     page = driver.page_source
     soup = BeautifulSoup(page, 'html.parser')
     return soup
 
 def driver_get_source_match_stats(url):
     driver.get(url)
-    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'statContent')))
+    WebDriverWait(driver, 8).until(EC.visibility_of_element_located((By.ID, 'statistics-content')))
     page = driver.page_source
     soup = BeautifulSoup(page, 'html.parser')
     return soup
     
 def driver_get_source_match_lineups(url):
     driver.get(url)
-    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'lineups-wrapper')))
+    WebDriverWait(driver, 8).until(EC.visibility_of_element_located((By.ID, 'lineups-content')))
     page = driver.page_source
     soup = BeautifulSoup(page, 'html.parser')
     return soup
@@ -338,31 +338,34 @@ for url in urls:
             #print(lineups)
             
             names_home = []
-            for tr in lineups.find_all('td', class_='summary-vertical fl'):
-                name_home = tr.find_all(class_='name')
-                #print(names_home)
-                for name in name_home:
-                    if '(' in name.text:
-                        #print(name.text[:-4])
-                        names_home.append(name.text[:-4])
-                        #match.append(name.text[:-4])
-                    else:
-                        #print(name.text)
-                        names_home.append(name.text)
-                        #match.append(name.text)
-            
             names_away = []
-            for tr in lineups.find_all('td', class_='summary-vertical fr'):
-                name_away = tr.find_all(class_='name')
-                for name in name_away:
-                    if '(' in name.text:
-                        #print(name.text[:-4])
-                        names_away.append(name.text[:-4])
-                        #match.append(name.text[:-4])
-                    else:
-                        #print(name.text)
-                        names_away.append(name.text)
-                        #match.append(name.text)
+            
+            # sometimes there is lineups page but there are no players
+            if lineups is not None:
+                for tr in lineups.find_all('td', class_='summary-vertical fl'):
+                    name_home = tr.find_all(class_='name')
+                    #print(names_home)
+                    for name in name_home:
+                        if '(' in name.text:
+                            #print(name.text[:-4])
+                            names_home.append(name.text[:-4])
+                            #match.append(name.text[:-4])
+                        else:
+                            #print(name.text)
+                            names_home.append(name.text)
+                            #match.append(name.text)
+                
+                for tr in lineups.find_all('td', class_='summary-vertical fr'):
+                    name_away = tr.find_all(class_='name')
+                    for name in name_away:
+                        if '(' in name.text:
+                            #print(name.text[:-4])
+                            names_away.append(name.text[:-4])
+                            #match.append(name.text[:-4])
+                        else:
+                            #print(name.text)
+                            names_away.append(name.text)
+                            #match.append(name.text)
             
             while len(names_home) < 20 :
                 names_home.append('')
