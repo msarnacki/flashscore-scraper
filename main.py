@@ -58,8 +58,8 @@ def driver_get_source(url):
 
 def driver_get_source_match_summary(url):
     driver.get(url)
+    WebDriverWait(driver, 8).until(EC.url_to_be(url))
     WebDriverWait(driver, 8).until(EC.visibility_of_element_located((By.ID, 'summary-content')))
-    WebDriverWait(driver, 8).until(EC.visibility_of_element_located((By.CLASS_NAME, 'team-primary-content')))
     page = driver.page_source
     soup = BeautifulSoup(page, 'html.parser')
     return soup
@@ -326,6 +326,9 @@ for url in urls:
                 list_empty_str.append('')
             match.extend(list_empty_str)
 
+        #filling stats if something went wrong at the end
+        while len(match) < (len(column_names) - 2*20 - len(incidents_cols)):
+            match.append('')
             
         ###
         #LINEUPS
@@ -439,8 +442,8 @@ for url in urls:
             match.append(incident_str)
         
         #reset page source if going from match summary to match summary
-        if match_stats == None and match_lineups == None:
-            driver.get('https://www.google.com')
+        #if match_stats == None and match_lineups == None:
+        #    driver.get('https://www.google.com')
             
         #print(match)
         while len(match) < len(column_names):
