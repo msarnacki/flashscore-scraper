@@ -248,7 +248,7 @@ for url in urls:
             #print('no odds for that match')
         
         scores = soup.find_all(class_='scoreboard')
-        for score in scores:    
+        for score in scores[-2:]:    
             #print(score.text)
             match.append(score.text)
         
