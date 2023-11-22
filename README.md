@@ -1,5 +1,14 @@
 # FlashScore scraper
 
+<p align="left">
+    <img src="https://img.shields.io/github/stars/msarnacki/flashscore-scraper"/>
+    <img src="https://img.shields.io/github/watchers/msarnacki/flashscore-scraper"/>
+    <img src="https://img.shields.io/github/commit-activity/t/msarnacki/flashscore-scraper"/>
+    <img src="https://img.shields.io/github/last-commit/msarnacki/flashscore-scraper"/>
+    <img src="https://img.shields.io/github/languages/top/msarnacki/flashscore-scraper"/>
+    <img src="https://img.shields.io/github/repo-size/msarnacki/flashscore-scraper"/>
+</p>
+
 It is my first web scraping script. I am interested in football and stiatistics of all kind and that's why I chose to scrape match details and results from FlashScore.com.
 
 ## How does it work?
