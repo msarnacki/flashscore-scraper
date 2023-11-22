@@ -5,6 +5,7 @@
     <img src="https://img.shields.io/github/watchers/msarnacki/flashscore-scraper"/>
     <img src="https://img.shields.io/github/commit-activity/t/msarnacki/flashscore-scraper"/>
     <img src="https://img.shields.io/github/last-commit/msarnacki/flashscore-scraper"/>
+    <img src="https://img.shields.io/github/issues/msarnacki/flashscore-scraper"/>
     <img src="https://img.shields.io/github/languages/top/msarnacki/flashscore-scraper"/>
     <img src="https://img.shields.io/github/repo-size/msarnacki/flashscore-scraper"/>
 </p>
